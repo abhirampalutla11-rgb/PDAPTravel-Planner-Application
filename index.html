@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WanderWise | Budget Travel Planner</title>
+<style>
+:root{--ink:#172b3a;--muted:#60717d;--bg:#f5f7f4;--card:#fff;--green:#176b55;--mint:#dff4e9;--orange:#f1a35b;--line:#e4eae6;--red:#b42318;--shadow:0 12px 35px rgba(23,43,58,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:700}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px clamp(16px,4vw,56px);background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.08rem;font-weight:900;letter-spacing:-.03em}.brandmark{width:38px;height:38px;border-radius:13px;background:var(--green);color:white;display:grid;place-items:center}
+.badge{font-size:.78rem;color:var(--green);background:var(--mint);padding:6px 10px;border-radius:99px;font-weight:800}
+main{max-width:1180px;margin:auto;padding:28px clamp(16px,4vw,56px) 60px}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:22px;align-items:stretch;margin-bottom:24px}
+.hero-copy{padding:clamp(24px,4vw,42px);border-radius:24px;background:linear-gradient(135deg,#123d36,#176b55);color:white;position:relative;overflow:hidden}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.75rem;font-weight:900;color:#b8f1d5}
+h1{font-size:clamp(2rem,4vw,3.5rem);line-height:1.06;letter-spacing:-.055em;margin:13px 0 16px;max-width:650px}
+.hero-copy p{color:#e2f5eb;max-width:580px;margin:0 0 24px}.hero-art{min-height:240px;border-radius:24px;background:linear-gradient(160deg,#f7d9a8,#f1a35b);padding:25px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);overflow:hidden}
+.sun{font-size:3rem}.route{font-size:2.5rem;letter-spacing:.3em}.art-note{font-weight:900;font-size:1.25rem;max-width:230px}
+.btn-primary{background:var(--orange);color:#342517}.btn-secondary{background:var(--mint);color:var(--green)}.btn-quiet{background:#eef2ef;color:var(--ink)}.btn-danger{background:#fff0ef;color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}.stat{background:var(--card);padding:17px 20px;border:1px solid var(--line);border-radius:17px}.stat small{display:block;color:var(--muted);font-weight:700}.stat strong{display:block;font-size:1.5rem;margin-top:4px}
+.layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:22px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow);margin-bottom:20px}
+.card h2{font-size:1.2rem;letter-spacing:-.025em;margin:0 0 5px}.sub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:.84rem;font-weight:800;color:#344b58}
+input,select{width:100%;padding:11px 12px;border:1px solid #d5dfd9;border-radius:11px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px #176b551c}.checkrow{display:flex;flex-wrap:wrap;gap:8px}.chip{display:flex;align-items:center;gap:6px;border:1px solid var(--line);padding:7px 10px;border-radius:99px;font-size:.84rem}.chip input{width:auto}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.notice{padding:12px 14px;border-radius:12px;background:#fff7e8;color:#78521d;font-size:.86rem;margin-top:14px}
+.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}.summary-item{background:#f7faf8;border-radius:13px;padding:13px}.summary-item small{display:block;color:var(--muted);font-weight:700}.summary-item strong{font-size:1.15rem}
+.progress{height:9px;background:#edf1ee;border-radius:99px;overflow:hidden;margin:9px 0 4px}.progress span{height:100%;display:block;background:var(--green);width:0;transition:width .2s}.progress.over span{background:var(--red)}
+.itinerary-day{padding:14px 0;border-top:1px solid var(--line)}.itinerary-day:first-child{border-top:0}.day-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.day-head strong{font-size:1rem}.day-head span{font-size:.8rem;color:var(--green);font-weight:800;background:var(--mint);padding:4px 8px;border-radius:99px}
+.itinerary-day ul{padding-left:20px;margin:9px 0 0;color:#465b65}.itinerary-day li{margin:5px 0}
+.trip-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}.trip-row:first-child{border-top:0}.trip-row strong{display:block}.trip-row small{color:var(--muted)}
+.empty{padding:20px;border:1px dashed #cbd8d0;border-radius:14px;color:var(--muted);text-align:center}
+.footer{text-align:center;color:var(--muted);font-size:.82rem;padding:15px}
+.hidden{display:none!important}
+@media(max-width:800px){.hero,.layout{grid-template-columns:1fr}.hero-art{min-height:180px}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:1.2rem}.topbar{position:static}}
+@media(max-width:480px){main{padding-top:17px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.stats{grid-template-columns:1fr}.card{padding:17px}.hero-copy{padding:25px}.summary-grid{grid-template-columns:1fr 1fr}.topbar .badge{display:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brandmark">✦</span> WanderWise <span style="font-weight:500;color:#60717d">/ PDAP prototype</span></div>
+  <span class="badge">₹0 development • Budget-first travel</span>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Travel more thoughtfully</div>
+      <h1>Your next trip,<br>planned around your budget.</h1>
+      <p>Build a simple day-wise plan, estimate your expenses, and keep your trip details together — without paid APIs.</p>
+      <button class="btn-primary" onclick="document.getElementById('tripForm').scrollIntoView({behavior:'smooth'})">Plan a trip ↗</button>
+    </div>
+    <div class="hero-art" aria-label="Decorative travel illustration">
+      <div class="sun">☀️</div><div class="route">✦ ─ ✈ ─ ✦</div>
+      <div class="art-note">Small budget.<br>Big memories.</div>
+    </div>
+  </section>
+  <section class="stats">
+    <div class="stat"><small>Saved trips</small><strong id="statTrips">0</strong></div>
+    <div class="stat"><small>Planned travellers</small><strong id="statPeople">0</strong></div>
+    <div class="stat"><small>Trips within budget</small><strong id="statWithin">—</strong></div>
+  </section>
+  <div class="layout">
+    <section>
+      <div class="card" id="tripForm">
+        <h2>✍️ Create your trip</h2>
+        <p class="sub">Tell us the basics. Costs are planning estimates, not live travel prices.</p>
+        <form id="plannerForm">
+          <div class="form-grid">
+            <div class="field full"><label for="destination">Destination *</label><input id="destination" placeholder="e.g., Goa" required maxlength="80"></div>
+            <div class="field"><label for="startDate">Start date *</label><input id="startDate" type="date" required></div>
+            <div class="field"><label for="endDate">End date *</label><input id="endDate" type="date" required></div>
+            <div class="field"><label for="travellers">Number of travellers *</label><input id="travellers" type="number" min="1" step="1" value="2" required></div>
+            <div class="field"><label for="budget">Total budget (₹) *</label><input id="budget" type="number" min="1" step="1" placeholder="30000" required></div>
+            <div class="field full"><label>Interests</label><div class="checkrow">
+              <label class="chip"><input type="checkbox" name="interest" value="Nature"> 🌿 Nature</label>
+              <label class="chip"><input type="checkbox" name="interest" value="Beaches"> 🏖️ Beaches</label>
+              <label class="chip"><input type="checkbox" name="interest" value="Food"> 🍲 Food</label>
+              <label class="chip"><input type="checkbox" name="interest" value="Culture"> 🏛️ Culture</label>
+              <label class="chip"><input type="checkbox" name="interest" value="Photography"> 📷 Photography</label>
+              <label class="chip"><input type="checkbox" name="interest" value="Adventure"> 🥾 Adventure</label>
+            </div></div>
+          </div>
+          <div class="actions"><button class="btn-primary" type="submit">Generate my plan</button><button class="btn-quiet" type="button" id="resetBtn">Clear form</button></div>
+          <div id="formError" class="notice hidden" role="alert"></div>
+        </form>
+      </div>
+      <div class="card">
+        <h2>🧭 Your itinerary</h2><p class="sub" id="itinerarySubtitle">Create a trip to generate a sample day-wise plan.</p>
+        <div id="itinerary" class="empty">Your trip plan will appear here.</div>
+      </div>
+    </section>
+    <section>
+      <div class="card">
+        <h2>💰 Budget snapshot</h2><p class="sub">A sample estimate split across common expense categories.</p>
+        <div id="budgetEmpty" class="empty">Your estimated costs will appear after you generate a trip.</div>
+        <div id="budgetPanel" class="hidden">
+          <div class="summary-grid">
+            <div class="summary-item"><small>Estimated total</small><strong id="estimatedTotal">₹0</strong></div>
+            <div class="summary-item"><small>Budget remaining</small><strong id="remaining">₹0</strong></div>
+            <div class="summary-item"><small>Per traveller</small><strong id="perPerson">₹0</strong></div>
+            <div class="summary-item"><small>Trip duration</small><strong id="duration">0 days</strong></div>
+          </div>
+          <div class="progress"><span id="budgetBar"></span></div><small id="budgetStatus"></small>
+          <div id="costBreakdown" style="margin-top:16px"></div>
+          <div class="notice">Estimates are illustrative only. Confirm actual transport, lodging, food and activity prices before booking.</div>
+          <div class="actions"><button class="btn-primary" id="saveBtn">Save trip</button><button class="btn-quiet" id="editBtn">Edit current trip</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>❤️ Saved trips</h2><p class="sub">Saved in this browser on this device.</p>
+        <div id="savedTrips" class="empty">No trips saved yet.</div>
+      </div>
+    </section>
+  </div>
+  <div class="footer">PDAP Phase 3 prototype • Built with HTML, CSS and JavaScript • No account or paid API required</div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let currentTrip = null;
+const money = n => new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n);
+const localISO = d => {const x=new Date(d);x.setMinutes(x.getMinutes()-x.getTimezoneOffset());return x.toISOString().slice(0,10)};
+$('startDate').value = localISO(new Date());
+const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+2); $('endDate').value = localISO(tomorrow);
+
+function getTrips(){try{return JSON.parse(localStorage.getItem('pdapTrips')||'[]')}catch(e){return []}}
+function putTrips(trips){localStorage.setItem('pdapTrips',JSON.stringify(trips))}
+function interests(){return [...document.querySelectorAll('input[name="interest"]:checked')].map(x=>x.value)}
+function durationFor(a,b){const d=(new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000;return Math.round(d)+1}
+function calculate(trip){
+ const days=trip.days, people=trip.travellers;
+ // Transparent illustrative estimates; not connected to live pricing.
+ const basePerPersonPerDay = {transport:450, lodging:850, food:500, activities:350};
+ const costs = {
+  transport: Math.round(basePerPersonPerDay.transport*people + (days>1 ? people*150 : 0)),
+  lodging: Math.round(basePerPersonPerDay.lodging*people*Math.max(0,days-1)),
+  food: Math.round(basePerPersonPerDay.food*people*days),
+  activities: Math.round(basePerPersonPerDay.activities*people*days)
+ };
+ costs.total = Object.values(costs).reduce((s,v)=>s+v,0);
+ return costs;
+}
+function makeTripFromForm(){
+ const destination=$('destination').value.trim(), start=$('startDate').value, end=$('endDate').value;
+ const people=Number($('travellers').value), budget=Number($('budget').value);
+ const error=$('formError'); error.classList.add('hidden'); error.textContent='';
+ if(!destination){throw Error('Please enter a destination.')}
+ if(!start||!end){throw Error('Please choose both trip dates.')}
+ if(new Date(end+'T00:00:00')<new Date(start+'T00:00:00')){throw Error('End date must be on or after the start date.')}
+ if(!Number.isInteger(people)||people<1){throw Error('Travellers must be a whole number of at least 1.')}
+ if(!Number.isFinite(budget)||budget<=0){throw Error('Budget must be greater than ₹0.')}
+ const days=durationFor(start,end);
+ const trip={id:currentTrip?.id||String(Date.now()),destination,start,end,travellers:people,budget,interests:interests(),days};
+ trip.costs=calculate(trip);
+ return trip;
+}
+function render(trip){
+ currentTrip=trip;
+ $('budgetEmpty').classList.add('hidden'); $('budgetPanel').classList.remove('hidden');
+ $('estimatedTotal').textContent=money(trip.costs.total);
+ const remaining=trip.budget-trip.costs.total;
+ $('remaining').textContent=money(remaining); $('remaining').style.color=remaining<0?'var(--red)':'var(--green)';
+ $('perPerson').textContent=money(Math.round(trip.costs.total/trip.travellers)); $('duration').textContent=trip.days+' day'+(trip.days===1?'':'s');
+ const pct=Math.min(100,trip.costs.total/trip.budget*100); $('budgetBar').style.width=pct+'%';
+ $('budgetBar').parentElement.classList.toggle('over',trip.costs.total>trip.budget);
+ $('budgetStatus').textContent=trip.costs.total>trip.budget?'⚠️ Estimated cost exceeds budget by '+money(trip.costs.total-trip.budget)+'.':'✓ Estimate is within budget, with '+money(remaining)+' remaining.';
+ $('costBreakdown').innerHTML='<strong>Estimated cost breakdown</strong>'+[['Transport',trip.costs.transport],['Lodging',trip.costs.lodging],['Food',trip.costs.food],['Activities',trip.costs.activities]].map(([k,v])=>`<div class="trip-row"><span>${k}</span><strong>${money(v)}</strong></div>`).join('');
+ $('itinerarySubtitle').textContent=`${trip.destination} • ${trip.days} day${trip.days===1?'':'s'} • ${trip.travellers} traveller${trip.travellers===1?'':'s'}`;
+ const interest=trip.interests.length?trip.interests:['local highlights'];
+ const dayTemplates=[
+  ['Arrive and get oriented','Explore a nearby area','Enjoy a relaxed evening'],
+  ['Visit a well-known local attraction','Try local food within your budget','Explore a market or cultural area'],
+  ['Choose an activity based on your interests','Keep time for rest and photos','Review spending before the next day'],
+  ['Explore a quieter neighbourhood','Visit one final highlight','Pack and prepare for departure']
+ ];
+ let out='';
+ for(let i=0;i<trip.days;i++){
+  const label=new Date(new Date(trip.start+'T00:00:00').getTime()+i*86400000).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  let items=dayTemplates[Math.min(i,3)].slice();
+  if(i===0&&trip.interests.includes('Food'))items[1]='Explore local food options';
+  if(trip.interests.includes('Nature')&&i===1)items[0]='Look for a nature spot or scenic walk';
+  if(trip.interests.includes('Photography'))items[2]='Allow time for photography and sunset views';
+  out+=`<div class="itinerary-day"><div class="day-head"><strong>Day ${i+1} · ${label}</strong><span>Plan idea</span></div><ul>${items.map(x=>`<li>${x}</li>`).join('')}<li>Focus: ${interest[(i)%interest.length]}</li></ul></div>`;
+ }
+ $('itinerary').classList.remove('empty'); $('itinerary').innerHTML=out;
+}
+$('plannerForm').addEventListener('submit',e=>{e.preventDefault();try{const trip=makeTripFromForm();render(trip)}catch(err){$('formError').textContent=err.message;$('formError').classList.remove('hidden')}});
+$('resetBtn').addEventListener('click',()=>{$('plannerForm').reset();$('travellers').value=2;$('formError').classList.add('hidden');currentTrip=null;$('budgetPanel').classList.add('hidden');$('budgetEmpty').classList.remove('hidden');$('itinerary').className='empty';$('itinerary').textContent='Your trip plan will appear here.';$('itinerarySubtitle').textContent='Create a trip to generate a sample day-wise plan.'});
+$('saveBtn').addEventListener('click',()=>{if(!currentTrip)return;const trips=getTrips();const index=trips.findIndex(t=>t.id===currentTrip.id);if(index>=0)trips[index]=currentTrip;else trips.unshift(currentTrip);putTrips(trips);renderSaved();$('saveBtn').textContent='Saved ✓';setTimeout(()=>$('saveBtn').textContent='Save trip',1200)});
+$('editBtn').addEventListener('click',()=>{if(!currentTrip)return;$('destination').value=currentTrip.destination;$('startDate').value=currentTrip.start;$('endDate').value=currentTrip.end;$('travellers').value=currentTrip.travellers;$('budget').value=currentTrip.budget;document.querySelectorAll('input[name="interest"]').forEach(x=>x.checked=currentTrip.interests.includes(x.value));$('tripForm').scrollIntoView({behavior:'smooth'})});
+function loadTrip(id){const trip=getTrips().find(t=>t.id===id);if(!trip)return;$('destination').value=trip.destination;$('startDate').value=trip.start;$('endDate').value=trip.end;$('travellers').value=trip.travellers;$('budget').value=trip.budget;document.querySelectorAll('input[name="interest"]').forEach(x=>x.checked=trip.interests.includes(x.value));render(trip);window.scrollTo({top:0,behavior:'smooth'})}
+function deleteTrip(id){if(!confirm('Delete this saved trip?'))return;putTrips(getTrips().filter(t=>t.id!==id));renderSaved()}
+function renderSaved(){
+ const trips=getTrips();$('statTrips').textContent=trips.length;$('statPeople').textContent=trips.reduce((n,t)=>n+t.travellers,0);$('statWithin').textContent=trips.length?trips.filter(t=>t.costs.total<=t.budget).length+'/'+trips.length:'—';
+ if(!trips.length){$('savedTrips').className='empty';$('savedTrips').textContent='No trips saved yet.';return}
+ $('savedTrips').className='';$('savedTrips').innerHTML=trips.map(t=>`<div class="trip-row"><div><strong>${escapeHTML(t.destination)}</strong><small>${t.days} day(s) · ${t.travellers} traveller(s) · ${money(t.budget)} budget</small></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn-secondary" onclick="loadTrip('${t.id}')">Open</button><button class="btn-danger" onclick="deleteTrip('${t.id}')">Delete</button></div></div>`).join('');
+}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+renderSaved();
+</script>
+</body>
+</html>
